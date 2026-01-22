@@ -1,0 +1,846 @@
+{
+  "metadata": {
+    "id": "3e04b74f-de30-45d2-a676-47b952d02aa8",
+    "name": "Home Loan Repayment Processing New 1",
+    "description": "Automated workflow for processing home loan repayment emails and creating cases for team resolution",
+    "category": "Finance",
+    "version": "1.0.3",
+    "createdAt": "2026-01-22T05:34:29.059Z",
+    "updatedAt": "2026-01-22T05:34:32.913Z"
+  },
+  "nodes": [
+    {
+      "id": "trigger-1",
+      "type": "trigger",
+      "label": "Schedule Trigger",
+      "description": "Runs daily at 5:00 AM",
+      "position": {
+        "x": 100,
+        "y": 100
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "label": "Read Mailbox",
+      "description": "Fetch emails from configured mailbox",
+      "position": {
+        "x": 320,
+        "y": 100
+      },
+      "jobConfig": {
+        "retryTimeCycle": "R4/PT20"
+      },
+      "formConfig": {
+        "formType": "camundaForms"
+      }
+    },
+    {
+      "id": "condition-1",
+      "type": "condition",
+      "label": "Match Keywords",
+      "description": "Filter emails containing: payment, repayment, loan, EMI",
+      "position": {
+        "x": 540,
+        "y": 100
+      },
+      "camundaConfig": {
+        "asyncBefore": false,
+        "asyncAfter": true,
+        "exclusive": false
+      },
+      "jobConfig": {
+        "retryTimeCycle": "R5/PT30",
+        "jobPriority": "15"
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "label": "Create Case",
+      "description": "Create case for loan processing team",
+      "position": {
+        "x": 760,
+        "y": 100
+      },
+      "jobConfig": {
+        "retryTimeCycle": "R4/PT10M"
+      },
+      "multiInstance": {
+        "type": "parallel"
+      }
+    },
+    {
+      "id": "action-3",
+      "type": "action",
+      "label": "Assign to Team",
+      "description": "Auto-assign based on case priority",
+      "position": {
+        "x": 980,
+        "y": 100
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "label": "End",
+      "position": {
+        "x": 100,
+        "y": 220
+      }
+    },
+    {
+      "id": "d1e7b534-4669-48b1-9d7f-b05b869cb279",
+      "type": "trigger",
+      "label": "Schedule Trigger (Copy)",
+      "description": "Runs daily at 5:00 AM",
+      "position": {
+        "x": 150,
+        "y": 150
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "flow-1",
+      "from": "trigger-1",
+      "to": "action-1"
+    },
+    {
+      "id": "flow-2",
+      "from": "action-1",
+      "to": "condition-1"
+    },
+    {
+      "id": "flow-3",
+      "from": "condition-1",
+      "to": "action-2",
+      "label": "Match"
+    },
+    {
+      "id": "flow-4",
+      "from": "action-2",
+      "to": "action-3"
+    },
+    {
+      "id": "flow-5",
+      "from": "action-3",
+      "to": "end-1"
+    },
+    {
+      "id": "flow-skip",
+      "from": "condition-1",
+      "to": "end-1",
+      "label": "No Match"
+    }
+  ],
+  "personas": [
+    {
+      "id": "Participant_LoanOfficer",
+      "name": "Loan Officer",
+      "role": "processor",
+      "permissions": [
+        "view",
+        "edit",
+        "resolve"
+      ]
+    },
+    {
+      "id": "Participant_TeamLead",
+      "name": "Team Lead",
+      "role": "supervisor",
+      "permissions": [
+        "view",
+        "edit",
+        "resolve",
+        "reassign",
+        "escalate"
+      ]
+    },
+    {
+      "id": "Participant_Admin",
+      "name": "Admin",
+      "role": "admin",
+      "permissions": [
+        "view",
+        "edit",
+        "resolve",
+        "reassign",
+        "escalate",
+        "configure"
+      ]
+    }
+  ],
+  "users": [],
+  "isDraft": false,
+  "savedAt": "2026-01-15T04:46:30.631Z",
+  "versions": [
+    {
+      "id": "8cb0fc1c-0745-4791-88f6-e12cc94df2f9",
+      "version": "1.0.0",
+      "timestamp": "2026-01-15T04:36:06.921Z",
+      "author": "Current User",
+      "action": "created",
+      "description": "Initial workflow creation",
+      "snapshot": {
+        "nodes": [
+          {
+            "id": "trigger-1",
+            "type": "trigger",
+            "label": "Schedule Trigger",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 100,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-1",
+            "type": "action",
+            "label": "Read Mailbox",
+            "description": "Fetch emails from configured mailbox",
+            "position": {
+              "x": 320,
+              "y": 100
+            }
+          },
+          {
+            "id": "condition-1",
+            "type": "condition",
+            "label": "Match Keywords",
+            "description": "Filter emails containing: payment, repayment, loan, EMI",
+            "position": {
+              "x": 540,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-2",
+            "type": "action",
+            "label": "Create Case",
+            "description": "Create case for loan processing team",
+            "position": {
+              "x": 760,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT10M"
+            }
+          },
+          {
+            "id": "action-3",
+            "type": "action",
+            "label": "Assign to Team",
+            "description": "Auto-assign based on case priority",
+            "position": {
+              "x": 980,
+              "y": 100
+            }
+          },
+          {
+            "id": "end-1",
+            "type": "end",
+            "label": "End",
+            "position": {
+              "x": 100,
+              "y": 220
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "flow-1",
+            "from": "trigger-1",
+            "to": "action-1"
+          },
+          {
+            "id": "flow-2",
+            "from": "action-1",
+            "to": "condition-1"
+          },
+          {
+            "id": "flow-3",
+            "from": "condition-1",
+            "to": "action-2",
+            "label": "Match"
+          },
+          {
+            "id": "flow-4",
+            "from": "action-2",
+            "to": "action-3"
+          },
+          {
+            "id": "flow-5",
+            "from": "action-3",
+            "to": "end-1"
+          },
+          {
+            "id": "flow-skip",
+            "from": "condition-1",
+            "to": "end-1",
+            "label": "No Match"
+          }
+        ],
+        "personas": [
+          {
+            "id": "Participant_LoanOfficer",
+            "name": "Loan Officer",
+            "role": "processor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve"
+            ]
+          },
+          {
+            "id": "Participant_TeamLead",
+            "name": "Team Lead",
+            "role": "supervisor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate"
+            ]
+          },
+          {
+            "id": "Participant_Admin",
+            "name": "Admin",
+            "role": "admin",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate",
+              "configure"
+            ]
+          }
+        ],
+        "users": [],
+        "metadata": {
+          "name": "Home Loan Repayment Processing New",
+          "description": "Automated workflow for processing home loan repayment emails and creating cases for team resolution",
+          "category": "Finance",
+          "version": "1.0.0"
+        }
+      }
+    },
+    {
+      "id": "7fe2f885-2f8c-468e-86be-f2e406657000",
+      "version": "1.0.1",
+      "timestamp": "2026-01-15T04:42:48.419Z",
+      "author": "Current User",
+      "action": "deployed",
+      "description": "Workflow deployed",
+      "snapshot": {
+        "nodes": [
+          {
+            "id": "trigger-1",
+            "type": "trigger",
+            "label": "Schedule Trigger",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 100,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-1",
+            "type": "action",
+            "label": "Read Mailbox",
+            "description": "Fetch emails from configured mailbox",
+            "position": {
+              "x": 320,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT20"
+            }
+          },
+          {
+            "id": "condition-1",
+            "type": "condition",
+            "label": "Match Keywords",
+            "description": "Filter emails containing: payment, repayment, loan, EMI",
+            "position": {
+              "x": 540,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-2",
+            "type": "action",
+            "label": "Create Case",
+            "description": "Create case for loan processing team",
+            "position": {
+              "x": 760,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT10M"
+            }
+          },
+          {
+            "id": "action-3",
+            "type": "action",
+            "label": "Assign to Team",
+            "description": "Auto-assign based on case priority",
+            "position": {
+              "x": 980,
+              "y": 100
+            }
+          },
+          {
+            "id": "end-1",
+            "type": "end",
+            "label": "End",
+            "position": {
+              "x": 100,
+              "y": 220
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "flow-1",
+            "from": "trigger-1",
+            "to": "action-1"
+          },
+          {
+            "id": "flow-2",
+            "from": "action-1",
+            "to": "condition-1"
+          },
+          {
+            "id": "flow-3",
+            "from": "condition-1",
+            "to": "action-2",
+            "label": "Match"
+          },
+          {
+            "id": "flow-4",
+            "from": "action-2",
+            "to": "action-3"
+          },
+          {
+            "id": "flow-5",
+            "from": "action-3",
+            "to": "end-1"
+          },
+          {
+            "id": "flow-skip",
+            "from": "condition-1",
+            "to": "end-1",
+            "label": "No Match"
+          }
+        ],
+        "personas": [
+          {
+            "id": "Participant_LoanOfficer",
+            "name": "Loan Officer",
+            "role": "processor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve"
+            ]
+          },
+          {
+            "id": "Participant_TeamLead",
+            "name": "Team Lead",
+            "role": "supervisor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate"
+            ]
+          },
+          {
+            "id": "Participant_Admin",
+            "name": "Admin",
+            "role": "admin",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate",
+              "configure"
+            ]
+          }
+        ],
+        "users": [],
+        "metadata": {
+          "name": "Home Loan Repayment Processing New",
+          "description": "Automated workflow for processing home loan repayment emails and creating cases for team resolution",
+          "category": "Finance",
+          "version": "1.0.1"
+        }
+      }
+    },
+    {
+      "id": "edf69bc7-72d7-4acf-9a01-7dd6342c99b4",
+      "version": "1.0.2",
+      "timestamp": "2026-01-15T04:45:00.300Z",
+      "author": "Current User",
+      "action": "deployed",
+      "description": "Workflow deployed",
+      "snapshot": {
+        "nodes": [
+          {
+            "id": "trigger-1",
+            "type": "trigger",
+            "label": "Schedule Trigger",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 100,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-1",
+            "type": "action",
+            "label": "Read Mailbox",
+            "description": "Fetch emails from configured mailbox",
+            "position": {
+              "x": 320,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT20"
+            },
+            "formConfig": {
+              "formType": "camundaForms"
+            }
+          },
+          {
+            "id": "condition-1",
+            "type": "condition",
+            "label": "Match Keywords",
+            "description": "Filter emails containing: payment, repayment, loan, EMI",
+            "position": {
+              "x": 540,
+              "y": 100
+            },
+            "camundaConfig": {
+              "asyncBefore": false,
+              "asyncAfter": true,
+              "exclusive": false
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R5/PT30",
+              "jobPriority": "15"
+            }
+          },
+          {
+            "id": "action-2",
+            "type": "action",
+            "label": "Create Case",
+            "description": "Create case for loan processing team",
+            "position": {
+              "x": 760,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT10M"
+            },
+            "multiInstance": {
+              "type": "parallel"
+            }
+          },
+          {
+            "id": "action-3",
+            "type": "action",
+            "label": "Assign to Team",
+            "description": "Auto-assign based on case priority",
+            "position": {
+              "x": 980,
+              "y": 100
+            }
+          },
+          {
+            "id": "end-1",
+            "type": "end",
+            "label": "End",
+            "position": {
+              "x": 100,
+              "y": 220
+            }
+          },
+          {
+            "id": "d1e7b534-4669-48b1-9d7f-b05b869cb279",
+            "type": "trigger",
+            "label": "Schedule Trigger (Copy)",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 150,
+              "y": 150
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "flow-1",
+            "from": "trigger-1",
+            "to": "action-1"
+          },
+          {
+            "id": "flow-2",
+            "from": "action-1",
+            "to": "condition-1"
+          },
+          {
+            "id": "flow-3",
+            "from": "condition-1",
+            "to": "action-2",
+            "label": "Match"
+          },
+          {
+            "id": "flow-4",
+            "from": "action-2",
+            "to": "action-3"
+          },
+          {
+            "id": "flow-5",
+            "from": "action-3",
+            "to": "end-1"
+          },
+          {
+            "id": "flow-skip",
+            "from": "condition-1",
+            "to": "end-1",
+            "label": "No Match"
+          }
+        ],
+        "personas": [
+          {
+            "id": "Participant_LoanOfficer",
+            "name": "Loan Officer",
+            "role": "processor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve"
+            ]
+          },
+          {
+            "id": "Participant_TeamLead",
+            "name": "Team Lead",
+            "role": "supervisor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate"
+            ]
+          },
+          {
+            "id": "Participant_Admin",
+            "name": "Admin",
+            "role": "admin",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate",
+              "configure"
+            ]
+          }
+        ],
+        "users": [],
+        "metadata": {
+          "name": "Home Loan Repayment Processing New",
+          "description": "Automated workflow for processing home loan repayment emails and creating cases for team resolution",
+          "category": "Finance",
+          "version": "1.0.2"
+        }
+      }
+    },
+    {
+      "id": "33428e22-19b6-4e27-9ef9-512e08af0cca",
+      "version": "1.0.3",
+      "timestamp": "2026-01-15T04:46:30.630Z",
+      "author": "Current User",
+      "action": "deployed",
+      "description": "Workflow deployed",
+      "snapshot": {
+        "nodes": [
+          {
+            "id": "trigger-1",
+            "type": "trigger",
+            "label": "Schedule Trigger",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 100,
+              "y": 100
+            }
+          },
+          {
+            "id": "action-1",
+            "type": "action",
+            "label": "Read Mailbox",
+            "description": "Fetch emails from configured mailbox",
+            "position": {
+              "x": 320,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT20"
+            },
+            "formConfig": {
+              "formType": "camundaForms"
+            }
+          },
+          {
+            "id": "condition-1",
+            "type": "condition",
+            "label": "Match Keywords",
+            "description": "Filter emails containing: payment, repayment, loan, EMI",
+            "position": {
+              "x": 540,
+              "y": 100
+            },
+            "camundaConfig": {
+              "asyncBefore": false,
+              "asyncAfter": true,
+              "exclusive": false
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R5/PT30",
+              "jobPriority": "15"
+            }
+          },
+          {
+            "id": "action-2",
+            "type": "action",
+            "label": "Create Case",
+            "description": "Create case for loan processing team",
+            "position": {
+              "x": 760,
+              "y": 100
+            },
+            "jobConfig": {
+              "retryTimeCycle": "R4/PT10M"
+            },
+            "multiInstance": {
+              "type": "parallel"
+            }
+          },
+          {
+            "id": "action-3",
+            "type": "action",
+            "label": "Assign to Team",
+            "description": "Auto-assign based on case priority",
+            "position": {
+              "x": 980,
+              "y": 100
+            }
+          },
+          {
+            "id": "end-1",
+            "type": "end",
+            "label": "End",
+            "position": {
+              "x": 100,
+              "y": 220
+            }
+          },
+          {
+            "id": "d1e7b534-4669-48b1-9d7f-b05b869cb279",
+            "type": "trigger",
+            "label": "Schedule Trigger (Copy)",
+            "description": "Runs daily at 5:00 AM",
+            "position": {
+              "x": 150,
+              "y": 150
+            }
+          }
+        ],
+        "connections": [
+          {
+            "id": "flow-1",
+            "from": "trigger-1",
+            "to": "action-1"
+          },
+          {
+            "id": "flow-2",
+            "from": "action-1",
+            "to": "condition-1"
+          },
+          {
+            "id": "flow-3",
+            "from": "condition-1",
+            "to": "action-2",
+            "label": "Match"
+          },
+          {
+            "id": "flow-4",
+            "from": "action-2",
+            "to": "action-3"
+          },
+          {
+            "id": "flow-5",
+            "from": "action-3",
+            "to": "end-1"
+          },
+          {
+            "id": "flow-skip",
+            "from": "condition-1",
+            "to": "end-1",
+            "label": "No Match"
+          }
+        ],
+        "personas": [
+          {
+            "id": "Participant_LoanOfficer",
+            "name": "Loan Officer",
+            "role": "processor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve"
+            ]
+          },
+          {
+            "id": "Participant_TeamLead",
+            "name": "Team Lead",
+            "role": "supervisor",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate"
+            ]
+          },
+          {
+            "id": "Participant_Admin",
+            "name": "Admin",
+            "role": "admin",
+            "permissions": [
+              "view",
+              "edit",
+              "resolve",
+              "reassign",
+              "escalate",
+              "configure"
+            ]
+          }
+        ],
+        "users": [],
+        "metadata": {
+          "name": "Home Loan Repayment Processing New",
+          "description": "Automated workflow for processing home loan repayment emails and creating cases for team resolution",
+          "category": "Finance",
+          "version": "1.0.3"
+        }
+      }
+    }
+  ]
+}

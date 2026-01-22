@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+                  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+                  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+                  xmlns:camunda="http://camunda.org/schema/1.0/bpmn"
+                  id="Definitions_1"
+                  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="3e04b74f-de30-45d2-a676-47b952d02aa8" name="Home Loan Repayment Processing New 1" isExecutable="true">
+    <bpmn:startEvent id="trigger-1" name="Schedule Trigger" />
+    <bpmn:task id="action-1" name="Read Mailbox" />
+    <bpmn:exclusiveGateway id="condition-1" name="Match Keywords" />
+    <bpmn:task id="action-2" name="Create Case" />
+    <bpmn:task id="action-3" name="Assign to Team" />
+    <bpmn:endEvent id="end-1" name="End" />
+    <bpmn:startEvent id="d1e7b534-4669-48b1-9d7f-b05b869cb279" name="Schedule Trigger (Copy)" />
+    <bpmn:sequenceFlow id="flow_0" sourceRef="trigger-1" targetRef="action-1" />
+    <bpmn:sequenceFlow id="flow_1" sourceRef="action-1" targetRef="condition-1" />
+    <bpmn:sequenceFlow id="flow_2" sourceRef="condition-1" targetRef="action-2" />
+    <bpmn:sequenceFlow id="flow_3" sourceRef="action-2" targetRef="action-3" />
+    <bpmn:sequenceFlow id="flow_4" sourceRef="action-3" targetRef="end-1" />
+    <bpmn:sequenceFlow id="flow_5" sourceRef="condition-1" targetRef="end-1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="3e04b74f-de30-45d2-a676-47b952d02aa8">
+      <bpmndi:BPMNShape id="trigger-1_di" bpmnElement="trigger-1">
+        <dc:Bounds x="100" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="action-1_di" bpmnElement="action-1">
+        <dc:Bounds x="300" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="condition-1_di" bpmnElement="condition-1">
+        <dc:Bounds x="500" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="action-2_di" bpmnElement="action-2">
+        <dc:Bounds x="700" y="100" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="action-3_di" bpmnElement="action-3">
+        <dc:Bounds x="100" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end-1_di" bpmnElement="end-1">
+        <dc:Bounds x="300" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="d1e7b534-4669-48b1-9d7f-b05b869cb279_di" bpmnElement="d1e7b534-4669-48b1-9d7f-b05b869cb279">
+        <dc:Bounds x="500" y="250" width="100" height="80" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
