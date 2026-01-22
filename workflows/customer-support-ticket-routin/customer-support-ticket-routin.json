@@ -1,0 +1,96 @@
+{
+  "metadata": {
+    "id": "daafef89-a15d-4aa6-adb3-16231a5e2266",
+    "name": "Customer Support Ticket Routing",
+    "description": "Route incoming support tickets to appropriate teams based on category",
+    "category": "Support",
+    "version": "1.0.0",
+    "createdAt": "2026-01-22T05:02:20.740Z",
+    "updatedAt": "2026-01-22T05:02:20.740Z"
+  },
+  "nodes": [
+    {
+      "id": "trigger-1",
+      "type": "trigger",
+      "label": "New Ticket",
+      "description": "Triggered when new support ticket is created",
+      "position": {
+        "x": 100,
+        "y": 100
+      }
+    },
+    {
+      "id": "condition-1",
+      "type": "condition",
+      "label": "Categorize",
+      "description": "Route based on ticket category",
+      "position": {
+        "x": 320,
+        "y": 100
+      }
+    },
+    {
+      "id": "action-1",
+      "type": "action",
+      "label": "Assign Technical",
+      "position": {
+        "x": 540,
+        "y": 100
+      }
+    },
+    {
+      "id": "end-1",
+      "type": "end",
+      "label": "End",
+      "position": {
+        "x": 760,
+        "y": 100
+      }
+    },
+    {
+      "id": "action-2",
+      "type": "action",
+      "label": "Assign Billing",
+      "position": {
+        "x": 980,
+        "y": 100
+      }
+    }
+  ],
+  "connections": [
+    {
+      "id": "flow-1",
+      "from": "trigger-1",
+      "to": "condition-1",
+      "isDefault": false
+    },
+    {
+      "id": "flow-2",
+      "from": "condition-1",
+      "to": "action-1",
+      "label": "Technical",
+      "isDefault": false
+    },
+    {
+      "id": "flow-3",
+      "from": "condition-1",
+      "to": "action-2",
+      "label": "Billing",
+      "isDefault": false
+    },
+    {
+      "id": "flow-4",
+      "from": "action-1",
+      "to": "end-1",
+      "isDefault": false
+    },
+    {
+      "id": "flow-5",
+      "from": "action-2",
+      "to": "end-1",
+      "isDefault": false
+    }
+  ],
+  "personas": [],
+  "users": []
+}
